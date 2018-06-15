@@ -7,8 +7,8 @@
 |rule_id|规则标示||
 |group_id|所属分组||
 |rule_type|规则类型||
-|rule|规则逻辑|规则逻辑用字符串描述，不同规则，规则描述的格式各不相同|
-|hit_cluster|集群|规则命中后应该选择的集群，如beta1、beta2、beta3等|
+|rule_str|规则逻辑串|规则逻辑用字符串描述，不同规则，规则描述的格式各不相同|
+|cluster|集群|规则命中后应该选择的集群，如beta1、beta2、beta3等|
 |priority|优先级||
 |status|状态|ON:状态打开，OFF:状态关闭|
 |create_time|创建时间||
