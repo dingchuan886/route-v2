@@ -17,7 +17,9 @@ local _M = {
 
     RULE_GROUP_UN_EFFECTIVE = Result:newErrorResult('RULE_GROUP_UN_EFFECTIVE', '路由分组无效'),
 
-    RULE_UN_HIT = Result:newErrorResult('RULE_UN_HIT', '没有命中路由规则')
+    RULE_UN_HIT = Result:newErrorResult('RULE_UN_HIT', '没有命中路由规则'),
+
+    DB_ERROR = Result:newErrorResult('DB_ERROR', '数据库操作失败')
 }
 
 return _M
