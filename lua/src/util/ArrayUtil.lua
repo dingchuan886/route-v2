@@ -16,4 +16,15 @@ function _M.contain(array, element)
     return false
 end
 
+--------------------------------------------------------------------------------------
+-- k,v都为string的Map，做k,v反转
+--------------------------------------------------------------------------------------
+function _M.reverse(map)
+    local result = {}
+    for k, v in pairs(map) do
+        result[v] = k
+    end
+    return result
+end
+
 return _M

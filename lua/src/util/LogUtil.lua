@@ -10,7 +10,7 @@ local DEBUG = ngx and ngx.DEBUG or '[DEBUG]'
 
 local function log(level, ...)
     if ngx and ngx.log then
-        ngx.log(level, table.concat({ ... }, ' ', 2))
+        ngx.log(level, table.concat({ ... }, ' '))
         return
     end
 

@@ -23,6 +23,8 @@
 |status|状态|ON:状态打开，OFF:状态关闭|
 |protocol|协议类型|目前仅分TCP4层代理和HTTP（HTTPS）7层代理区别，值为TCP或HTTP|
 |group_desc|分组描述||
+|create_time|创建时间||
+|update_time|最后更新时间||
 
 ### 3. 路由集群表
 |字段|含义|备注|
@@ -32,3 +34,5 @@
 |ip|集群IP||
 |port|集群端口||
 |cluster_desc|集群描述||
+|create_time|创建时间||
+|update_time|最后更新时间||
