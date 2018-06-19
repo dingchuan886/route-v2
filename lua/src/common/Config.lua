@@ -11,11 +11,11 @@ local _M = {
 
     -- 数据库连接字符串
     MYSQL_PROS = {
-        host = "192.168.195.128",
+        host = "172.30.251.33",
         port = 3306,
-        database = "route",
+        database = "route_v2",
         user = "root",
-        password = "root",
+        password = "CDE#4rfv",
         charset = "utf8",
         max_packet_size = 1024 * 1024
     },

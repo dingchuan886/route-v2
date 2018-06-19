@@ -19,6 +19,21 @@ function _M.clone(self, data, func)
 end
 
 --------------------------------------------------------------------------------------
+-- 映射数组对象数据
+-- 1）option为boolean类型时候，option=true 表示key大写，false表示小写
+-- 2）option为映射表
+--------------------------------------------------------------------------------------
+function _M.mappingArray(origin, option)
+    local result = {}
+
+    for i = 1, #origin do
+        table.insert(result, _M.mapping(origin[i], option))
+    end
+
+    return result
+end
+
+--------------------------------------------------------------------------------------
 -- 映射对象数据
 -- 1）option为boolean类型时候，option=true 表示key大写，false表示小写
 -- 2）option为映射表
