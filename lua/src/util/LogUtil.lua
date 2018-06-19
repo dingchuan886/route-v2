@@ -3,13 +3,18 @@ _M._VERSION = '1.0'
 
 local Config = require("common.Config")
 
-local function log(...)
+local ERR = ngx and ngx.ERR or '[ERROR]'
+local INFO = ngx and ngx.INFO or '[INFO]'
+local WARN = ngx and ngx.WARN or '[WARN]'
+local DEBUG = ngx and ngx.DEBUG or '[DEBUG]'
+
+local function log(level, ...)
     if ngx and ngx.log then
-        ngx.log(table.concat({ ... }))
+        ngx.log(level, table.concat({ ... }, ' ', 2))
         return
     end
 
-    local logs = { ... }
+    local logs = {level,  ... }
     for i = 1, #logs do
         print(logs[i])
     end
@@ -20,7 +25,7 @@ function _M.debug(...)
         return
     end
 
-    log(' [ DEBUG ] \t', ...)
+    log(DEBUG, ...)
 end
 
 function _M.info(...)
@@ -28,7 +33,7 @@ function _M.info(...)
         return
     end
 
-    log(' [ INFO ] \t', ...)
+    log(INFO, ...)
 end
 
 function _M.warn(...)
@@ -36,7 +41,7 @@ function _M.warn(...)
         return
     end
 
-    log(' [ WARN ] \t', ...)
+    log(WARN, ...)
 end
 
 function _M.error(...)
@@ -44,7 +49,7 @@ function _M.error(...)
         return
     end
 
-    log(' [ ERROR ] \t', ...)
+    log(ERR, ...)
 end
 
 return _M
