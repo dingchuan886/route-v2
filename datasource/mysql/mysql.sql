@@ -19,7 +19,6 @@ create table route_rule
   cluster varchar(64) not null,
   priority int default 1,
   status varchar(16) default 'OFF',
-  group_desc varchar(256),
   create_time datetime,
   update_time datetime
 )

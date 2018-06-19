@@ -19,7 +19,9 @@ local _M = {
 
     RULE_UN_HIT = Result:newErrorResult('RULE_UN_HIT', '没有命中路由规则'),
 
-    DB_ERROR = Result:newErrorResult('DB_ERROR', '数据库操作失败')
+    DB_ERROR = Result:newErrorResult('DB_ERROR', '数据库操作失败'),
+
+    RULE_DATA_ERROR = Result:newErrorResult('RULE_DATA_ERROR', '路由规则数据有问题')
 }
 
 return _M

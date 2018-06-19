@@ -50,7 +50,7 @@ function _M.execute(sql)
         return prepare
     end
 
-    return Result:newSuccessResult()
+    return ErrCode.SUCCESS
 end
 
 function _M.query(sql, option)
