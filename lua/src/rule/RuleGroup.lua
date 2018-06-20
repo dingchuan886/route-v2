@@ -25,6 +25,14 @@ function _M.clone(self, data)
     return self
 end
 
+function _M.create(self, ruleGroupDO)
+    local result = _M.new(self, ruleGroupDO.groupId, ruleGroupDO.protocol, ruleGroupDO.priority)
+    for i = 1, #ruleGroupDO.rules do
+        _M.add(result, ruleGroupDO.rules[i])
+    end
+    return _M
+end
+
 function _M.getCluster(self, context)
     if not next(self.rules) then
         return ErrCode.RULE_GROUP_UN_EFFECTIVE:detailErrorMsg('路由分组下面没有任何有效的路由规则')

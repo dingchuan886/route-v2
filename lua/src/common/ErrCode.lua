@@ -19,6 +19,8 @@ local _M = {
 
     RULE_UN_HIT = Result:newErrorResult('RULE_UN_HIT', '没有命中路由规则'),
 
+    CLUSTER_UN_HIT = Result:newErrorResult('CLUSTER_UN_HIT', '集群相关信息没有找到'),
+
     DB_ERROR = Result:newErrorResult('DB_ERROR', '数据库操作失败'),
 
     RULE_DATA_ERROR = Result:newErrorResult('RULE_DATA_ERROR', '路由规则数据有问题'),
