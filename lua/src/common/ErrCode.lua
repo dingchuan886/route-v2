@@ -21,7 +21,9 @@ local _M = {
 
     DB_ERROR = Result:newErrorResult('DB_ERROR', '数据库操作失败'),
 
-    RULE_DATA_ERROR = Result:newErrorResult('RULE_DATA_ERROR', '路由规则数据有问题')
+    RULE_DATA_ERROR = Result:newErrorResult('RULE_DATA_ERROR', '路由规则数据有问题'),
+
+    BAD_REQUEST = Result:newErrorResult('BAD_REQUEST', '请求参数错误')
 }
 
 return _M

@@ -33,6 +33,7 @@
 |cluster|集群名|唯一索引字段|
 |ip|集群IP||
 |port|集群端口||
+|status|状态|ON:状态打开，OFF:状态关闭|
 |cluster_desc|集群描述||
 |create_time|创建时间||
 |update_time|最后更新时间||

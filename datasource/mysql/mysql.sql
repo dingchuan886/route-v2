@@ -1,24 +1,35 @@
-create table route_rule_group
+CREATE TABLE route_rule_group
 (
-  group_id int primary key auto_increment,
-  app_name varchar(64) not null,
-  priority int default 1,
-  status varchar(16) default 'OFF',
-  protocol varchar(16) not null,
-  group_desc varchar(256),
-  create_time datetime,
-  update_time datetime
-)
+  group_id    INT PRIMARY KEY AUTO_INCREMENT,
+  app_name    VARCHAR(64) NOT NULL,
+  priority    INT             DEFAULT 1,
+  status      VARCHAR(16)     DEFAULT 'OFF',
+  protocol    VARCHAR(16) NOT NULL,
+  group_desc  VARCHAR(256),
+  create_time DATETIME,
+  update_time DATETIME
+);
 
-create table route_rule
+CREATE TABLE route_rule
 (
-  rule_id int primary key auto_increment,
-  group_id int not null,
-  rule_type varchar(64) not null,
-  rule_str varchar(128) not null,
-  cluster varchar(64) not null,
-  priority int default 1,
-  status varchar(16) default 'OFF',
-  create_time datetime,
-  update_time datetime
-)
+  rule_id     INT PRIMARY KEY AUTO_INCREMENT,
+  group_id    INT          NOT NULL,
+  rule_type   VARCHAR(64)  NOT NULL,
+  rule_str    VARCHAR(128) NOT NULL,
+  cluster     VARCHAR(64)  NOT NULL,
+  priority    INT             DEFAULT 1,
+  status      VARCHAR(16)     DEFAULT 'OFF',
+  create_time DATETIME,
+  update_time DATETIME
+);
+
+CREATE TABLE route_cluster
+(
+  cluster_id   INT PRIMARY KEY AUTO_INCREMENT,
+  cluster      VARCHAR(64)  NOT NULL,
+  addresses    VARCHAR(512) NOT NULL,
+  status       VARCHAR(16)     DEFAULT 'OFF',
+  cluster_desc VARCHAR(256),
+  create_time  DATETIME,
+  update_time  DATETIME
+);

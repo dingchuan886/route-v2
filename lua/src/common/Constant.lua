@@ -38,9 +38,20 @@ local _M = {
         CREATE_TIME = 'createTime',
         UPDATE_TIME = 'updateTime'
     },
+
+    CLUSTER_COLUMN_MAPPING = {
+        CLUSTER_ID = 'clusterId',
+        CLUSTER = 'cluster',
+        ADDRESSES = 'addresses',
+        STATUS = 'status',
+        CLUSTER_DESC = 'clusterDesc',
+        CREATE_TIME = 'createTime',
+        UPDATE_TIME = 'updateTime'
+    },
 }
 
 _M.RULE_GROUP_COLUMN_REVERSE_MAPPING = ArrayUtil.reverse(_M.RULE_GROUP_COLUMN_MAPPING)
 _M.RULE_COLUMN_REVERSE_MAPPING = ArrayUtil.reverse(_M.RULE_COLUMN_MAPPING)
+_M.CLUSTER_COLUMN_REVERSE_MAPPING = ArrayUtil.reverse(_M.CLUSTER_COLUMN_MAPPING)
 
 return _M

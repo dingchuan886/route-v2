@@ -2,6 +2,31 @@ local _M = {}
 _M._VERSION = '1.0'
 
 --------------------------------------------------------------------------------------
+-- 合并数组
+--------------------------------------------------------------------------------------
+function _M.merge(left, right)
+    local result = {}
+    for i = 1, #left do
+        table.insert(result, left[i])
+    end
+    for i = 1, #right do
+        table.insert(result, right[i])
+    end
+    return result
+end
+
+function _M.mergeAll(arrays)
+    local result = {}
+    for i = 1, #arrays do
+        local array = arrays[i]
+        for j = 1, #array do
+            table.insert(result, array[j])
+        end
+    end
+    return result
+end
+
+--------------------------------------------------------------------------------------
 -- 判断数组是否包含某元素
 --------------------------------------------------------------------------------------
 function _M.contain(array, element)

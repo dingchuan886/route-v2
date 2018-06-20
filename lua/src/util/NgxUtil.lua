@@ -1,6 +1,8 @@
 local _M = {}
 _M._VERSION = '1.0'
 
+local LogUtil = require("util.LogUtil")
+
 --------------------------------------------------------------------------------------
 -- 获取ngx的IP
 -- @param ngx ngx对象
@@ -8,7 +10,7 @@ _M._VERSION = '1.0'
 -- proxy_set_header X-Real-IP $remote_addr;
 -- proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 --------------------------------------------------------------------------------------
-function _M.getNgxIp()
+function _M.getIp()
     if not ngx then
         return -1
     end
@@ -24,7 +26,7 @@ end
 --------------------------------------------------------------------------------------
 -- 获取ngx的request_uri
 --------------------------------------------------------------------------------------
-function _M.getNgxRequestUri()
+function _M.getRequestUri()
     if not ngx then
         return ''
     end
@@ -34,6 +36,21 @@ function _M.getNgxRequestUri()
     end
 
     return ngx.var.request_uri
+end
+
+--------------------------------------------------------------------------------------
+-- 获取ngx的method
+--------------------------------------------------------------------------------------
+function _M.getRequestMethod()
+    if not ngx then
+        return ''
+    end
+
+    if ngx.__TEST__ then
+        return ngx.__TEST__.requestMethod
+    end
+
+    return string.upper(ngx.var.request_method)
 end
 
 --------------------------------------------------------------------------------------
@@ -59,6 +76,26 @@ function _M.getRequestParams()
     end
 
     return {}
+end
+
+function _M.exit(status)
+    if not ngx or ngx.__TEST__ then
+        LogUtil.debug("exit(" .. status .. ")")
+        return
+    end
+
+    ngx.exit(status)
+end
+
+function _M.exitRlt(status, rlt)
+    if not ngx or ngx.__TEST__ then
+        LogUtil.debug("exit(" .. status .. ")", StringUtil.toJSONString(rlt))
+        return
+    end
+
+    ngx.say(StringUtil.toJSONString(rlt))
+    ngx.exit(200)
+    return
 end
 
 return _M

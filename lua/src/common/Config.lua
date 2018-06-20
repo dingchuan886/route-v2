@@ -9,6 +9,15 @@ local _M = {
     -- DEBUG=4,INFO=3,WARN=2,ERR=1,关闭日志=0
     LOG_LEVEL = 4,
 
+    -- 分组大小限制
+    RULE_GROUP_MAX = 30,
+
+    -- 每个组下面大小限制
+    RULE_MAX = 10,
+
+    -- 集群大小限制
+    CLUSTER_MAX = 20,
+
     -- 数据库连接字符串
     MYSQL_PROS = {
         host = "172.30.251.33",
@@ -22,6 +31,9 @@ local _M = {
 
     -- 数据库超时时间
     MYSQL_TIMEOUT = 1000,
+
+    -- ADMIN服务前缀网关
+    ADMIN_PREFIX = '',
 
 }
 

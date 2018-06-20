@@ -63,6 +63,14 @@ function _M.listRuleGroups()
     return queryRlt
 end
 
+function _M.ruleGroupSize()
+    local queryRlt = Mysql.query([[select count(1) as num from route_rule_group]], true)
+    if not queryRlt.success then
+        return ErrCode.DB_ERROR:detailErrorMsg('数据库查询路由分组总数失败')
+    end
+    return Result:newSuccessResult(queryRlt.data[1]['NUM'])
+end
+
 function _M.queryRuleGroup(groupId)
     local sqlQuery = [[
         select * from route_rule_group where group_id = %s
@@ -133,6 +141,17 @@ function _M.listRules(groupId)
     return queryRlt
 end
 
+function _M.ruleSize(groupId)
+    local sqlQuery = [[
+        select count(1) as num from route_rule where group_id = %s
+    ]]
+    local queryRlt = Mysql.query(string.format(sqlQuery, groupId), true)
+    if not queryRlt.success then
+        return ErrCode.DB_ERROR:detailErrorMsg('数据库查询分组下面的规则总数失败')
+    end
+    return Result:newSuccessResult(queryRlt.data[1]['NUM'])
+end
+
 function _M.queryRule(ruleId)
     local sqlQuery = [[
         select * from route_rule where rule_id = %s
@@ -185,6 +204,96 @@ function _M.deleteRule(ruleId)
     local deleteRlt = Mysql.execute(string.format(sqlStr, ruleId))
     if not deleteRlt.success then
         return ErrCode.DB_ERROR:detailErrorMsg('数据库删除路由规则失败')
+    end
+    return ErrCode.SUCCESS
+end
+
+--------------------------------------------------------------------------------------
+-- 查询有效的集群信息
+--------------------------------------------------------------------------------------
+function _M.queryAvailableCluster()
+    local clusterRlt = Mysql.query([[select * from route_cluster where status = 'ON']], Constant.CLUSTER_COLUMN_MAPPING)
+    if not clusterRlt.success then
+        return ErrCode.DB_ERROR:detailErrorMsg('数据库读取集群信息失败')
+    end
+
+    if not next(clusterRlt.data) then
+        return ErrCode.RULE_DATA_ERROR:detailErrorMsg('没有有效的集群信息')
+    end
+
+    return clusterRlt
+end
+
+--------------------------------------------------------------------------------------
+-- 集群增删查改
+--------------------------------------------------------------------------------------
+function _M.listClusters()
+    local queryRlt = Mysql.query([[select * from route_cluster]], Constant.CLUSTER_COLUMN_MAPPING)
+    if not queryRlt.success then
+        return ErrCode.DB_ERROR:detailErrorMsg('数据库读取集群信息失败')
+    end
+    return queryRlt
+end
+
+function _M.clusterSize()
+    local queryRlt = Mysql.query([[select count(1) as num from route_cluster]], true)
+    if not queryRlt.success then
+        return ErrCode.DB_ERROR:detailErrorMsg('数据库查询集群总数失败')
+    end
+    return Result:newSuccessResult(queryRlt.data[1]['NUM'])
+end
+
+function _M.queryCluster(clusterId)
+    local sqlQuery = [[
+        select * from route_cluster where  = %s
+    ]]
+    local queryRlt = Mysql.query(string.format(sqlQuery, ruleId), Constant.CLUSTER_COLUMN_MAPPING)
+    if not queryRlt.success then
+        return ErrCode.DB_ERROR:detailErrorMsg('数据库读取集群信息失败')
+    end
+    if not next(queryRlt.data) then
+        return ErrCode.RULE_DATA_ERROR:detailErrorMsg('集群不存在')
+    end
+    return Result:newSuccessResult((queryRlt.data)[1])
+end
+
+function _M.addCluster(cluster)
+    local sqlStr = [[
+        insert into route_cluster (cluster, addresses, status, cluster_desc, create_time, update_time)
+        values ('%s', '%s', '%s', '%s', now(), now())
+    ]]
+    local insertRlt = Mysql.execute(string.format(sqlStr, cluster.cluster, cluster.addresses, cluster.status, cluster.clusterDesc))
+    if not insertRlt.success then
+        return ErrCode.DB_ERROR:detailErrorMsg('数据库插入集群失败')
+    end
+    return ErrCode.SUCCESS
+end
+
+function _M.updateCluster(cluster)
+    local sqlStr = [[
+        update route_cluster
+        set cluster = '%s',
+        addresses = '%s',
+        status = '%s',
+        cluster_desc = '%s',
+        update_time = now()
+        where cluster_id = %s
+    ]]
+    local updateRlt = Mysql.execute(string.format(sqlStr, cluster.cluster, cluster.addresses, cluster.status, cluster.clusterDesc, cluster.clusterId))
+    if not updateRlt.success then
+        return ErrCode.DB_ERROR:detailErrorMsg('数据库更新集群失败')
+    end
+    return ErrCode.SUCCESS
+end
+
+function _M.deleteCluster(clusterId)
+    local sqlStr = [[
+        delete from route_cluster
+        where cluster_id = %s
+    ]]
+    local deleteRlt = Mysql.execute(string.format(sqlStr, clusterId))
+    if not deleteRlt.success then
+        return ErrCode.DB_ERROR:detailErrorMsg('数据库删除集群失败')
     end
     return ErrCode.SUCCESS
 end

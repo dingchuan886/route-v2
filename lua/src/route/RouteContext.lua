@@ -12,9 +12,9 @@ local NgxUtil = require("util.NgxUtil")
 function _M.build(self)
     self = {}
 
-    self.ip = NgxUtil.getNgxIp()
+    self.ip = NgxUtil.getIp()
     self.longIP = IpUtil.ip2Long(self.ip)
-    self.requestUri = NgxUtil.getNgxRequestUri()
+    self.requestUri = NgxUtil.getRequestUri()
     self.requestParams = NgxUtil.getRequestParams()
 
     return setmetatable(self, mt)
