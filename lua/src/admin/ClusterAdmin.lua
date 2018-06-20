@@ -37,12 +37,23 @@ _M.invokers = {
             if args[1] ~= params.clusterId then
                 return ErrCode.BAD_REQUEST:detailErrorMsg('请求参数中的分组信息与uri的分组信息不匹配，异常请求')
             end
+
+            local checkRlt = RouteService.queryCluster(args[1])
+            if not checkRlt.success then
+                return checkRlt
+            end
+
             return RouteService.updateCluster(params)
         end
     }, {
         method = 'DELETE',
         uri = "(/clusters/(%d+))",
         invoke = function(method, uri, params, args)
+            local checkRlt = RouteService.queryCluster(args[1])
+            if not checkRlt.success then
+                return checkRlt
+            end
+
             return RouteService.deleteCluster(args[1])
         end
     }

@@ -2,6 +2,8 @@ local StringUtil = require("util.StringUtil")
 local Config = require("common.Config")
 local NgxUtil = require("util.NgxUtil")
 local ArrayUtil = require("util.ArrayUtil")
+local LogUtil = require("util.LogUtil")
+local DebugUtil = require("util.DebugUtil")
 
 local uri = NgxUtil.getRequestUri()
 if StringUtil.indexOf(uri, Config.ADMIN_PREFIX) ~= 1 then
@@ -11,8 +13,15 @@ if StringUtil.indexOf(uri, Config.ADMIN_PREFIX) ~= 1 then
 end
 
 local uri = string.sub(uri, #Config.ADMIN_PREFIX + 1)
+DebugUtil.debugInvoke(function()
+    LogUtil.debug("request uri = " .. uri)
+end)
 
 local method = NgxUtil.getRequestMethod()
+DebugUtil.debugInvoke(function()
+    LogUtil.debug("request uri = " .. method)
+end)
+
 if method ~= 'GET' and method ~= 'POST' and method ~= 'PUT' and method ~= 'DELETE' then
     -- 不支持的方法
     NgxUtil.exit(405)
@@ -20,6 +29,9 @@ if method ~= 'GET' and method ~= 'POST' and method ~= 'PUT' and method ~= 'DELET
 end
 
 local params = NgxUtil.getRequestParams()
+DebugUtil.debugInvoke(function()
+    LogUtil.debug("request params = " .. StringUtil.toJSONString(params))
+end)
 
 --[[
     uri格式大致符合restful规范，包括下面几类:

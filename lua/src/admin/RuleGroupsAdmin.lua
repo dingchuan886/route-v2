@@ -37,12 +37,23 @@ _M.invokers = {
             if args[1] ~= params.groupId then
                 return ErrCode.BAD_REQUEST:detailErrorMsg('请求参数中的分组信息与uri的分组信息不匹配，异常请求')
             end
+
+            local checkRlt = RouteService.queryRuleGroup(args[1])
+            if not checkRlt.success then
+                return checkRlt
+            end
+
             return RouteService.updateRuleGroup(params)
         end
     }, {
         method = 'DELETE',
         uri = "(/ruleGroups/(%d+))",
         invoke = function(method, uri, params, args)
+            local checkRlt = RouteService.queryRuleGroup(args[1])
+            if not checkRlt.success then
+                return checkRlt
+            end
+
             return RouteService.deleteRuleGroup(args[1])
         end
     }

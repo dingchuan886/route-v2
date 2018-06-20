@@ -2,6 +2,8 @@ local _M = {}
 _M._VERSION = '1.0'
 
 local LogUtil = require("util.LogUtil")
+local StringUtil = require("util.StringUtil")
+local DebugUtil = require("util.DebugUtil")
 
 --------------------------------------------------------------------------------------
 -- 获取ngx的IP
@@ -80,7 +82,7 @@ end
 
 function _M.exit(status)
     if not ngx or ngx.__TEST__ then
-        LogUtil.debug("exit(" .. status .. ")")
+        LogUtil.debug("response status = " .. status)
         return
     end
 
@@ -89,9 +91,13 @@ end
 
 function _M.exitRlt(status, rlt)
     if not ngx or ngx.__TEST__ then
-        LogUtil.debug("exit(" .. status .. ")", StringUtil.toJSONString(rlt))
+        LogUtil.debug("response status = " .. status .. ", rlt = " .. StringUtil.toJSONString(rlt))
         return
     end
+
+    DebugUtil.debugInvoke(function()
+        LogUtil.debug("response status = " .. status .. ", rlt = " .. StringUtil.toJSONString(rlt))
+    end)
 
     ngx.say(StringUtil.toJSONString(rlt))
     ngx.exit(200)

@@ -37,12 +37,23 @@ _M.invokers = {
             if args[1] ~= params.ruleId then
                 return ErrCode.BAD_REQUEST:detailErrorMsg('请求参数中的规则信息与uri的规则信息不匹配，异常请求')
             end
+
+            local checkRlt = RouteService.queryRule(args[1])
+            if not checkRlt.success then
+                return checkRlt
+            end
+
             return RouteService.updateRule(params)
         end
     }, {
         method = "DELETE",
         uri = "(/rules/(%d+))",
         invoke = function(method, uri, params, args)
+            local checkRlt = RouteService.queryRule(args[1])
+            if not checkRlt.success then
+                return checkRlt
+            end
+
             return RouteService.deleteRule(args[1])
         end
     }

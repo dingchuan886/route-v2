@@ -245,7 +245,7 @@ end
 
 function _M.queryCluster(clusterId)
     local sqlQuery = [[
-        select * from route_cluster where  = %s
+        select * from route_cluster where cluster_id= %s
     ]]
     local queryRlt = Mysql.query(string.format(sqlQuery, ruleId), Constant.CLUSTER_COLUMN_MAPPING)
     if not queryRlt.success then
