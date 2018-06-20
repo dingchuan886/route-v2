@@ -7,6 +7,8 @@ local Config = require("common.Config")
 local LogUtil = require("util.LogUtil")
 local ClassUtil = require("util.ClassUtil")
 local Result = require("common.Result")
+local DebugUtil = require("util.DebugUtil")
+local StringUtil = require("util.StringUtil")
 
 local function closeMysql(db)
     if not db then
@@ -46,6 +48,10 @@ end
 
 function _M.execute(sql)
     local prepare = prepare(sql)
+    DebugUtil.debugInvoke(function()
+        LogUtil.debug("mysql-prepare:", StringUtil.toJSONString(prepare))
+    end)
+
     if not prepare.success then
         return prepare
     end
@@ -55,6 +61,10 @@ end
 
 function _M.query(sql, option)
     local prepare = prepare(sql)
+    DebugUtil.debugInvoke(function()
+        LogUtil.debug("mysql-prepare:", StringUtil.toJSONString(prepare))
+    end)
+
     if not prepare.success then
         return prepare
     end
