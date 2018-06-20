@@ -10,6 +10,11 @@ _M.invokers = {
         method = "GET",
         uri = "(/ruleGroups/(%d+)/rules)",
         invoke = function(method, uri, params, args)
+            local checkRlt = RouteService.queryRuleGroup(args[1])
+            if not checkRlt.success then
+                return checkRlt
+            end
+
             return RouteService.listRules(args[1])
         end
     }, {

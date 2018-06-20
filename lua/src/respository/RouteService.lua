@@ -27,29 +27,28 @@ function _M.queryAvailableRuleGroups()
         return ErrCode.RULE_DATA_ERROR:detailErrorMsg('没有有效的路由分组数据信息，路由分组为空或者路由分组下面的分组规则为空')
     end
 
-    local result = {}
+    local groupSet = {}
     for i = 1, #routeRuleGroup do
         local group = routeRuleGroup[i]
-        result[group.groupId] = group
+        group.rules = {}
+        groupSet[group.groupId] = group
     end
     for i = 1, #routeRule do
         local rule = routeRule[i]
-        local group = result[rule.groupId]
-        if group then
-            if group.rules then
-                table.insert(group.rules, rule)
-            else
-                group.rules = { rule }
-            end
+        local group = groupSet[rule.groupId]
+        if group and group.rules then
+            table.insert(group.rules, rule)
         end
     end
+
     -- 若分组下面没有有效的规则，那么分组也无效，需要删除
-    for k, v in pairs(result) do
-        if not v or not v.rules or not next(v.rules) then
-            result[k] = nil
+    local result = {}
+    for _, group in pairs(groupSet) do
+        if group and group.rules and next(group.rules) then
+            table.insert(result, group)
         end
     end
-    return result
+    return Result:newSuccessResult(result)
 end
 
 --------------------------------------------------------------------------------------

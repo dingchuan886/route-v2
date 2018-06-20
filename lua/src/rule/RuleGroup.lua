@@ -7,6 +7,8 @@ local ErrCode = require("common.ErrCode")
 local Constant = require("common.Constant")
 local Result = require("common.Result")
 local ClassUtil = require("util.ClassUtil")
+local LogUtil = require("util.LogUtil")
+local StringUtil = require("util.StringUtil")
 
 function _M.new(self, groupId, protocol, priority)
     return setmetatable({ groupId = groupId, protocol = protocol, priority = priority, rules = {} }, mt)
@@ -28,9 +30,12 @@ end
 function _M.create(self, ruleGroupDO)
     local result = _M.new(self, ruleGroupDO.groupId, ruleGroupDO.protocol, ruleGroupDO.priority)
     for i = 1, #ruleGroupDO.rules do
-        _M.add(result, ruleGroupDO.rules[i])
+        local addRlt = _M.add(result, ruleGroupDO.rules[i])
+        if not addRlt.success then
+            LogUtil.debug('创建路由规则分组时，规则添加失败，groupId=', ruleGroupDO.groupId, ',rule=' .. StringUtil.toJSONString(ruleGroupDO.rules[i]))
+        end
     end
-    return _M
+    return result
 end
 
 function _M.getCluster(self, context)

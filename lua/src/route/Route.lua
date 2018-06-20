@@ -25,36 +25,41 @@ local function routeCluster(appName, protocol)
         return ruleGroupsRlt
     end
 
-    local ruleGroups = {}
-    for _, ruleGroups in pairs(ruleGroupsRlt.data) do
-        if next(ruleGroups) then
-            for i = 1, #ruleGroups do
-                local ruleGroup = ruleGroups[i]
-                if ruleGroup.appName == appName and ruleGroup.protocol == protocol then
-                    table.insert(ruleGroups, ruleGroup)
-                end
-            end
+    DebugUtil.debugInvoke(function()
+        LogUtil.debug("ruleGroupsRlt = ", StringUtil.toJSONString(ruleGroupsRlt))
+    end)
+
+    local availableRuleGroups = {}
+    for i = 1, #ruleGroupsRlt.data do
+        local ruleGroup = ruleGroupsRlt.data[i]
+        if ruleGroup.appName == appName and ruleGroup.protocol == protocol then
+            table.insert(availableRuleGroups, ruleGroup)
         end
     end
-    if not next(ruleGroups) then
+
+    DebugUtil.debugInvoke(function()
+        LogUtil.debug("availableRuleGroups = ", StringUtil.toJSONString(availableRuleGroups))
+    end)
+
+    if not next(availableRuleGroups) then
         return ErrCode.RULE_DATA_ERROR:detailErrorMsg('没有有效的路由分组数据信息')
     end
 
     -- 按照优先级排序
-    table.sort(ruleGroups, function(left, right)
+    table.sort(availableRuleGroups, function(left, right)
         return left.priority > right.priority
     end)
 
     local cluster
-    for i = 1, #ruleGroups do
-        local ruleGroups = RuleGroup:create(ruleGroups[i])
-        local rlt = ruleGroups:getCluster(context)
+    for i = 1, #availableRuleGroups do
+        local ruleGroup = RuleGroup:create(availableRuleGroups[i])
+        local rlt = ruleGroup:getCluster(context)
         if rlt.success then
             -- 命中路由
             cluster = rlt.data.cluster
 
             DebugUtil.debugInvoke(function()
-                LogUtil.debug("route rlt = ", StringUtil.toJSONString(rlt))
+                LogUtil.debug("route cluster = ", StringUtil.toJSONString(rlt))
             end)
 
             return Result:newSuccessResult(cluster)
@@ -134,7 +139,7 @@ end
 -- 路由判断入口，返回的是IP+端口
 --------------------------------------------------------------------------------------
 function _M.route(appName, protocol)
-    local routeClusterRlt = routeCluster()
+    local routeClusterRlt = routeCluster(appName, protocol)
     if not routeClusterRlt.success then
         return routeClusterRlt
     end
