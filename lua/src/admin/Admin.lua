@@ -3,35 +3,23 @@ local Config = require("common.Config")
 local NgxUtil = require("util.NgxUtil")
 local ArrayUtil = require("util.ArrayUtil")
 local LogUtil = require("util.LogUtil")
-local DebugUtil = require("util.DebugUtil")
 
 local uri = NgxUtil.getRequestUri()
+local method = NgxUtil.getRequestMethod()
+local params = NgxUtil.getRequestParams()
+LogUtil.info("request uri = ", uri, ", method = ", method, ", params = ", StringUtil.toJSONString(params))
+
 if StringUtil.indexOf(uri, Config.ADMIN_PREFIX) ~= 1 then
     -- 不是以prefix为前缀，那么直接返回404
     NgxUtil.exit(404)
     return
 end
 
-local uri = string.sub(uri, #Config.ADMIN_PREFIX + 1)
-DebugUtil.debugInvoke(function()
-    LogUtil.debug("request uri = " .. uri)
-end)
-
-local method = NgxUtil.getRequestMethod()
-DebugUtil.debugInvoke(function()
-    LogUtil.debug("request uri = " .. method)
-end)
-
 if method ~= 'GET' and method ~= 'POST' and method ~= 'PUT' and method ~= 'DELETE' then
     -- 不支持的方法
     NgxUtil.exit(405)
     return
 end
-
-local params = NgxUtil.getRequestParams()
-DebugUtil.debugInvoke(function()
-    LogUtil.debug("request params = " .. StringUtil.toJSONString(params))
-end)
 
 --[[
     uri格式大致符合restful规范，包括下面几类:
@@ -54,12 +42,14 @@ end)
         PUT /clusters/ID 更新某个指定的集群
         DELETE /clusters/ID 删除某个指定的集群
 ]]--
--- 合并三个数组
+local uri = string.sub(uri, #Config.ADMIN_PREFIX + 1)
+
 local invokers = ArrayUtil.mergeAll({
     require("admin.RuleGroupsAdmin").invokers,
     require("admin.RuleAdmin").invokers,
     require("admin.ClusterAdmin").invokers
 })
+
 for i = 1, #invokers do
     local invoker = invokers[i]
     if invoker.method == method then

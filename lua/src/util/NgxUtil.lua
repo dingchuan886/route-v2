@@ -86,6 +86,8 @@ function _M.exit(status)
         return
     end
 
+    LogUtil.info("response status = ", status)
+
     ngx.exit(status)
 end
 
@@ -95,13 +97,10 @@ function _M.exitRlt(status, rlt)
         return
     end
 
-    DebugUtil.debugInvoke(function()
-        LogUtil.debug("response status = " .. status .. ", rlt = " .. StringUtil.toJSONString(rlt))
-    end)
+    LogUtil.info("response status = " .. status .. ", rlt = " .. StringUtil.toJSONString(rlt))
 
     ngx.say(StringUtil.toJSONString(rlt))
-    ngx.exit(200)
-    return
+    ngx.exit(status)
 end
 
 return _M
