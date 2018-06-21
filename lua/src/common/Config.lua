@@ -5,6 +5,9 @@
 local _M = {
     _VERSION = '1.0',
 
+    -- 全局开关
+    ROUTE_SWITCH = true,
+
     -- DEBUG模式
     DEBUG = true,
 
@@ -33,7 +36,7 @@ local _M = {
     },
 
     -- 数据库超时时间
-    MYSQL_TIMEOUT = 1000,
+    MYSQL_TIMEOUT = 10000,
 
     -- ADMIN服务前缀网关
     ADMIN_PREFIX = '/route/admin',

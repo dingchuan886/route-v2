@@ -10,6 +10,7 @@ local ErrCode = require("common.ErrCode")
 local DebugUtil = require("util.DebugUtil")
 local Result = require("common.Result")
 local os = require("os")
+local Config = require("common.Config")
 
 --------------------------------------------------------------------------------------
 -- 路由判断，计算出需要走的cluster
@@ -130,6 +131,10 @@ end
 -- 路由判断入口，返回的是IP+端口
 --------------------------------------------------------------------------------------
 function _M.route(appName, protocol)
+    if not Config.ROUTE_SWITCH then
+        return ErrCode.ROUTE_SWITCH_CLOSE
+    end
+
     local routeClusterRlt = routeCluster(appName, protocol)
     LogUtil.info("routeClusterRlt:", StringUtil.toJSONString(routeClusterRlt))
 

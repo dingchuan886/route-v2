@@ -27,7 +27,9 @@ local _M = {
 
     BAD_REQUEST = Result:newErrorResult('BAD_REQUEST', '请求参数错误'),
 
-    NGX_CACHE_ERROR = Result:newErrorResult('NGX_CACHE_ERROR', 'ngx共享内存不可用')
+    NGX_CACHE_ERROR = Result:newErrorResult('NGX_CACHE_ERROR', 'ngx共享内存不可用'),
+
+    ROUTE_SWITCH_CLOSE = Result:newErrorResult('ROUTE_SWITCH_CLOSE', '路由开关关闭')
 }
 
 return _M
