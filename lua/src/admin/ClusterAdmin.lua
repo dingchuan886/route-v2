@@ -56,6 +56,12 @@ _M.invokers = {
 
             return RouteService.deleteCluster(args[1])
         end
+    }, {
+        method = 'PATCH',
+        uri = "/clusters",
+        invoke = function(method, uri, params, args)
+            return RouteService.queryAvailableCluster()
+        end
     }
 }
 

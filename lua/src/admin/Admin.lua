@@ -15,7 +15,7 @@ if StringUtil.indexOf(uri, Config.ADMIN_PREFIX) ~= 1 then
     return
 end
 
-if method ~= 'GET' and method ~= 'POST' and method ~= 'PUT' and method ~= 'DELETE' then
+if method ~= 'GET' and method ~= 'POST' and method ~= 'PUT' and method ~= 'DELETE' and method ~= 'PATCH' then
     -- 不支持的方法
     NgxUtil.exit(405)
     return
@@ -41,6 +41,10 @@ end
         GET /clusters/ID 获取某个指定的集群
         PUT /clusters/ID 更新某个指定的集群
         DELETE /clusters/ID 删除某个指定的集群
+    4. 将规则、集群信息刷入缓存，提高性能
+        PATCH /ruleGroups 重新刷新规则缓存
+        PATCH /clusters 刷新集群缓存
+
 ]]--
 local uri = string.sub(uri, #Config.ADMIN_PREFIX + 1)
 

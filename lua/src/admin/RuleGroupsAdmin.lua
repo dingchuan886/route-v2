@@ -56,6 +56,12 @@ _M.invokers = {
 
             return RouteService.deleteRuleGroup(args[1])
         end
+    }, {
+        method = 'PATCH',
+        uri = "/ruleGroups",
+        invoke = function(method, uri, params, args)
+            return RouteService.queryAvailableRuleGroups()
+        end
     }
 }
 

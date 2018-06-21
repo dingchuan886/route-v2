@@ -38,6 +38,8 @@ local _M = {
     -- ADMIN服务前缀网关
     ADMIN_PREFIX = '/route/admin',
 
+    -- 共享内存名称
+    ROUTE_SHARED_DICT_KEY = 'routeSharedCache',
 }
 
 return _M

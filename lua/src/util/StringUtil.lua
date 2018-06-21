@@ -50,4 +50,11 @@ function _M.toJSONString(obj)
     return CJson.encode(obj)
 end
 
+function _M.toJSONObject(str)
+    if str == nil then
+        return nil
+    end
+    return CJson.decode(str)
+end
+
 return _M

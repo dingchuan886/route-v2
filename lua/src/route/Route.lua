@@ -18,18 +18,14 @@ local function routeCluster(appName, protocol)
     local context = RouteContext:build()
     LogUtil.info("context = ", StringUtil.toJSONString(context))
 
-    local ruleGroupsRlt = RouteService.queryAvailableRuleGroups()
-    if not ruleGroupsRlt.success then
-        return ruleGroupsRlt
-    end
-
+    local ruleGroups = RouteService.queryAvailableRuleGroupsByCache()
     DebugUtil.debugInvoke(function()
-        LogUtil.debug("ruleGroupsRlt = ", StringUtil.toJSONString(ruleGroupsRlt))
+        LogUtil.debug("ruleGroups = ", StringUtil.toJSONString(ruleGroups))
     end)
 
     local availableRuleGroups = {}
-    for i = 1, #ruleGroupsRlt.data do
-        local ruleGroup = ruleGroupsRlt.data[i]
+    for i = 1, #ruleGroups do
+        local ruleGroup = ruleGroups[i]
         if ruleGroup.appName == appName and ruleGroup.protocol == protocol then
             table.insert(availableRuleGroups, ruleGroup)
         end
@@ -71,19 +67,16 @@ end
 -- 根据集群获取对应的IP+端口
 --------------------------------------------------------------------------------------
 local function getAddressByCluster(cluster)
-    local clusterRlt = RouteService.queryAvailableCluster()
-    if not clusterRlt.success then
-        return clusterRlt
-    end
+    local clusters = RouteService.queryAvailableClusterByCache()
 
     DebugUtil.debugInvoke(function()
-        LogUtil.debug("route cluster = ", StringUtil.toJSONString(clusterRlt))
+        LogUtil.debug("clusters = ", StringUtil.toJSONString(clusters))
     end)
 
     local hitCluster
-    for i = 1, #clusterRlt.data do
-        if clusterRlt.data[i].cluster == cluster then
-            hitCluster = clusterRlt.data[i]
+    for i = 1, #clusters do
+        if clusters[i].cluster == cluster then
+            hitCluster = clusters[i]
             break
         end
     end

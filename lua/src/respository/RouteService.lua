@@ -5,12 +5,28 @@ local Mysql = require("respository.mysql.Mysql")
 local ErrCode = require("common.ErrCode")
 local Constant = require("common.Constant")
 local Result = require("common.Result")
+local Config = require("common.Config")
+local StringUtil = require("util.StringUtil")
+local LogUtil = require("util.LogUtil")
 
 --------------------------------------------------------------------------------------
 -- 查询有效的路由分组（包括路由规则）
 -- 若路由分组下面没有一条有效的路由规则，那么路由分组也无效
 -- 查询路由规则和路由分组状态都必须为ON的
 --------------------------------------------------------------------------------------
+function _M.queryAvailableRuleGroupsByCache()
+    if ngx and ngx.shared then
+        local cache = ngx.shared[Config.ROUTE_SHARED_DICT_KEY]
+        if cache == nil then
+            return {}
+        end
+        return StringUtil.toJSONObject(cache:get(Constant.AVAILABLE_RULE_GROUPS_KEY)) or {}
+    end
+
+    local rlt = _M.queryAvailableRuleGroups()
+    return rlt.success and rlt.data or {}
+end
+
 function _M.queryAvailableRuleGroups()
     local routeRuleGroupRlt = Mysql.query([[select * from route_rule_group where status = 'ON']], Constant.RULE_GROUP_COLUMN_MAPPING)
     if not routeRuleGroupRlt.success then
@@ -48,6 +64,17 @@ function _M.queryAvailableRuleGroups()
             table.insert(result, group)
         end
     end
+
+    -- 计算成功，那么存入cache
+    if ngx and ngx.shared then
+        local cache = ngx.shared[Config.ROUTE_SHARED_DICT_KEY]
+        if cache == nil then
+            return ErrCode.NGX_CACHE_ERROR
+        end
+        cache:set(Constant.AVAILABLE_RULE_GROUPS_KEY, StringUtil.toJSONString(result))
+        LogUtil.debug("set:", StringUtil.toJSONString(cache:get(Constant.AVAILABLE_RULE_GROUPS_KEY)))
+    end
+
     return Result:newSuccessResult(result)
 end
 
@@ -210,6 +237,19 @@ end
 --------------------------------------------------------------------------------------
 -- 查询有效的集群信息
 --------------------------------------------------------------------------------------
+function _M.queryAvailableClusterByCache()
+    if ngx and ngx.shared then
+        local cache = ngx.shared[Config.ROUTE_SHARED_DICT_KEY]
+        if cache == nil then
+            return {}
+        end
+        return StringUtil.toJSONObject(cache:get(Constant.AVAILABLE_CLUSTER_KEY)) or {}
+    end
+
+    local rlt = _M.queryAvailableRuleGroups()
+    return rlt.success and rlt.data or {}
+end
+
 function _M.queryAvailableCluster()
     local clusterRlt = Mysql.query([[select * from route_cluster where status = 'ON']], Constant.CLUSTER_COLUMN_MAPPING)
     if not clusterRlt.success then
@@ -218,6 +258,17 @@ function _M.queryAvailableCluster()
 
     if not next(clusterRlt.data) then
         return ErrCode.RULE_DATA_ERROR:detailErrorMsg('没有有效的集群信息')
+    end
+
+    if clusterRlt.success then
+        -- 计算成功，那么存入cache
+        if ngx and ngx.shared then
+            local cache = ngx.shared[Config.ROUTE_SHARED_DICT_KEY]
+            if cache == nil then
+                return ErrCode.NGX_CACHE_ERROR
+            end
+            cache:set(Constant.AVAILABLE_CLUSTER_KEY, StringUtil.toJSONString(clusterRlt.data))
+        end
     end
 
     return clusterRlt

@@ -25,7 +25,9 @@ local _M = {
 
     RULE_DATA_ERROR = Result:newErrorResult('RULE_DATA_ERROR', '路由规则数据有问题'),
 
-    BAD_REQUEST = Result:newErrorResult('BAD_REQUEST', '请求参数错误')
+    BAD_REQUEST = Result:newErrorResult('BAD_REQUEST', '请求参数错误'),
+
+    NGX_CACHE_ERROR = Result:newErrorResult('NGX_CACHE_ERROR', 'ngx共享内存不可用')
 }
 
 return _M
