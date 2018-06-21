@@ -65,6 +65,16 @@ function _M.queryAvailableRuleGroups()
         end
     end
 
+    -- 优先级降序排序
+    table.sort(result, function(left, right)
+        return left.priority > right.priority
+    end)
+    for i = 1, #result do
+        table.sort(result[i].rules, function(left, right)
+            return left.priority > right.priority
+        end)
+    end
+
     -- 计算成功，那么存入cache
     if ngx and ngx.shared then
         local cache = ngx.shared[Config.ROUTE_SHARED_DICT_KEY]
@@ -72,7 +82,6 @@ function _M.queryAvailableRuleGroups()
             return ErrCode.NGX_CACHE_ERROR
         end
         cache:set(Constant.AVAILABLE_RULE_GROUPS_KEY, StringUtil.toJSONString(result))
-        LogUtil.debug("set:", StringUtil.toJSONString(cache:get(Constant.AVAILABLE_RULE_GROUPS_KEY)))
     end
 
     return Result:newSuccessResult(result)

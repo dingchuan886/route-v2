@@ -40,11 +40,6 @@ local function routeCluster(appName, protocol)
         return ErrCode.RULE_DATA_ERROR:detailErrorMsg('没有有效的路由分组数据信息')
     end
 
-    -- 按照优先级排序
-    table.sort(availableRuleGroups, function(left, right)
-        return left.priority > right.priority
-    end)
-
     local cluster
     for i = 1, #availableRuleGroups do
         local ruleGroup = RuleGroup:create(availableRuleGroups[i])

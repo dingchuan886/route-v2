@@ -32,7 +32,7 @@ function _M.create(self, ruleGroupDO)
     for i = 1, #ruleGroupDO.rules do
         local addRlt = _M.add(result, ruleGroupDO.rules[i])
         if not addRlt.success then
-            LogUtil.debug('创建路由规则分组时，规则添加失败，groupId=', ruleGroupDO.groupId, ',rule=' .. StringUtil.toJSONString(ruleGroupDO.rules[i]))
+            LogUtil.warn('创建路由规则分组时，规则添加失败，groupId=', ruleGroupDO.groupId, ',rule=' .. StringUtil.toJSONString(ruleGroupDO.rules[i]))
         end
     end
     return result
