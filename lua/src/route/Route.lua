@@ -16,9 +16,7 @@ local os = require("os")
 --------------------------------------------------------------------------------------
 local function routeCluster(appName, protocol)
     local context = RouteContext:build()
-    DebugUtil.debugInvoke(function()
-        LogUtil.debug("route context = ", StringUtil.toJSONString(context))
-    end)
+    LogUtil.info("context = ", StringUtil.toJSONString(context))
 
     local ruleGroupsRlt = RouteService.queryAvailableRuleGroups()
     if not ruleGroupsRlt.success then
@@ -140,11 +138,16 @@ end
 --------------------------------------------------------------------------------------
 function _M.route(appName, protocol)
     local routeClusterRlt = routeCluster(appName, protocol)
+    LogUtil.info("routeClusterRlt:", StringUtil.toJSONString(routeClusterRlt))
+
     if not routeClusterRlt.success then
         return routeClusterRlt
     end
 
-    return getAddressByCluster(routeClusterRlt.data)
+    local routeRlt = getAddressByCluster(routeClusterRlt.data)
+    LogUtil.info("routeRlt:", StringUtil.toJSONString(routeRlt))
+
+    return routeRlt
 end
 
 return _M
