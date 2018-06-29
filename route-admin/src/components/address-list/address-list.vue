@@ -6,7 +6,7 @@
     <Tag v-if="!editable" v-for="address in addressList" :key="address" :name="address"> {{ address }} </Tag>
     <Button v-if="editable" icon="ios-plus-empty" type="dashed" size="small" @click="handleAddAddress">添加地址</Button>
     <Modal v-model="modal" :footer-hide="true" title="添加地址" @on-cancel="handleModalCancel">
-      <Input v-model="inputStr" placeholder="地址格式IP:PORT" @on-enter="handleModalSubmit" />
+      <Input v-model="inputStr" placeholder="地址格式IP:PORT" @on-enter="handleModalSubmit"/>
     </Modal>
   </div>
 </template>
