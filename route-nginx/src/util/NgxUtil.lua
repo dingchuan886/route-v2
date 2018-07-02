@@ -72,7 +72,7 @@ function _M.getRequestParams()
     local requestMethod = ngx.var.request_method
     if "GET" == requestMethod then
         return ngx.req.get_uri_args()
-    elseif "POST" == requestMethod then
+    else
         ngx.req.read_body()
         return ngx.req.get_post_args()
     end
