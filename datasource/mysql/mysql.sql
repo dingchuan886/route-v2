@@ -8,7 +8,7 @@ CREATE TABLE route_rule_group
   group_desc  VARCHAR(256),
   create_time DATETIME,
   update_time DATETIME
-);
+)ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE route_rule
 (
@@ -21,7 +21,7 @@ CREATE TABLE route_rule
   status      VARCHAR(16)     DEFAULT 'OFF',
   create_time DATETIME,
   update_time DATETIME
-);
+)ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE route_cluster
 (
@@ -32,4 +32,4 @@ CREATE TABLE route_cluster
   cluster_desc VARCHAR(256),
   create_time  DATETIME,
   update_time  DATETIME
-);
+)ENGINE=MyISAM DEFAULT CHARSET=utf8;

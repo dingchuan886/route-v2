@@ -15,6 +15,12 @@ if StringUtil.indexOf(uri, Config.ADMIN_PREFIX) ~= 1 then
     return
 end
 
+-- 测试环境，跨域请求delete/put会options先做试探，因此直接返回200
+if method == 'OPTIONS' then
+    NgxUtil.exit(200)
+    return
+end
+
 if method ~= 'GET' and method ~= 'POST' and method ~= 'PUT' and method ~= 'DELETE' and method ~= 'PATCH' then
     -- 不支持的方法
     NgxUtil.exit(405)

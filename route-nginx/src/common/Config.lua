@@ -36,7 +36,7 @@ local _M = {
     },
 
     -- 数据库超时时间
-    MYSQL_TIMEOUT = 10000,
+    MYSQL_TIMEOUT = 100000,
 
     -- ADMIN服务前缀网关
     ADMIN_PREFIX = '/route/admin',

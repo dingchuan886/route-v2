@@ -299,21 +299,21 @@ function _M.clusterSize()
     if not queryRlt.success then
         return ErrCode.DB_ERROR:detailErrorMsg('数据库查询集群总数失败')
     end
-    return Result:newSuccessResult(queryRlt.data[1]['NUM'])
+    return Result:newSuccessResult(tonumber(queryRlt.data[1]['NUM']))
 end
 
 function _M.queryCluster(clusterId)
     local sqlQuery = [[
         select * from route_cluster where cluster_id= %s
     ]]
-    local queryRlt = Mysql.query(string.format(sqlQuery, ruleId), Constant.CLUSTER_COLUMN_MAPPING)
+    local queryRlt = Mysql.query(string.format(sqlQuery, clusterId), Constant.CLUSTER_COLUMN_MAPPING)
     if not queryRlt.success then
         return ErrCode.DB_ERROR:detailErrorMsg('数据库读取集群信息失败')
     end
     if not next(queryRlt.data) then
         return ErrCode.RULE_DATA_ERROR:detailErrorMsg('集群不存在')
     end
-    return Result:newSuccessResult((queryRlt.data)[1])
+    return Result:newSuccessResult(queryRlt.data[1])
 end
 
 function _M.addCluster(cluster)
